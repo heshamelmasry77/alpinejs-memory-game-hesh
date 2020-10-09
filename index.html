@@ -9,6 +9,10 @@
 
 <body>
 <div x-data="game()" class="px-10 flex justify-center items-center min-h-screen">
+  <div class="fixed top-0 right-0 p-10 font-bold text-3xl">
+    <span x-text="points"></span>
+    <span class="text-sm">pts</span>
+  </div>
   <div class="grid grid-cols-4 gap-10 flex-1">
     <template x-for="card in cards">
       <div>
@@ -42,6 +46,13 @@
       get flippedCards() {
         // this will return the flipped cards only flipped = true
         return this.cards.filter((card) => card.flipped)
+      },
+      get clearedCards() {
+        // get cleared cards
+        return this.cards.filter((card) => card.cleared)
+      },
+      get points() {
+        return this.clearedCards.length
       },
 
       // METHODS
