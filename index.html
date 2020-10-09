@@ -59,14 +59,21 @@
       flipCard(card) {
         console.log(card)
         card.flipped = !card.flipped
+        // check the flipped cards size
         if (this.flippedCards.length === 2) {
           // alert('time to check for match')
-          if (this.flippedCards[0]['color'] === this.flippedCards[1]['color']) {
+          // if the flipped cards matched
+          if (this.hasMatch()) {
             alert('you have a matched cards')
-            // Change the cleared status of the cards
+            // Change the cleared status of these cards
             this.flippedCards.forEach(card => card.cleared = true)
           }
+          // flip back the cards over from the beginning
+          this.flippedCards.forEach((card) => card.flipped = false)
         }
+      },
+      hasMatch() {
+        return this.flippedCards[0]['color'] === this.flippedCards[1]['color']
       }
     }
   }
