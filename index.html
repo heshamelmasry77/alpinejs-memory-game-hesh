@@ -11,9 +11,14 @@
 <div x-data="game()" class="px-10 flex justify-center items-center min-h-screen">
   <div class="grid grid-cols-4 gap-10 flex-1">
     <template x-for="card in cards">
-      <div :style="'background: ' + (card.flipped ? card.color : '#999')"
-           @click="card.flipped = !card.flipped"
-           class="h-32 cursor-pointer"></div>
+      <div>
+        <button
+          x-show="!card.cleared"
+          :style="'background: ' + (card.flipped ? card.color : '#999')"
+          @click="flipCard(card)"
+          class="w-full h-32 cursor-pointer"
+        ></button>
+      </div>
     </template>
   </div>
 </div>
@@ -21,6 +26,7 @@
 
   function game() {
     return {
+      // DATA
       cards: [
         {color: 'green',flipped: false,cleared: false},
         {color: 'red',flipped: false,cleared: false},
@@ -32,7 +38,26 @@
         {color: 'yellow',flipped: false,cleared: false},
       ],
 
-    };
+      // COMPUTED
+      get flippedCards() {
+        // this will return the flipped cards only flipped = true
+        return this.cards.filter((card) => card.flipped)
+      },
+
+      // METHODS
+      flipCard(card) {
+        console.log(card)
+        card.flipped = !card.flipped
+        if (this.flippedCards.length === 2) {
+          // alert('time to check for match')
+          if (this.flippedCards[0]['color'] === this.flippedCards[1]['color']) {
+            alert('you have a matched cards')
+            // Change the cleared status of the cards
+            this.flippedCards.forEach(card => card.cleared = true)
+          }
+        }
+      }
+    }
   }
 </script>
 </body>
