@@ -27,6 +27,12 @@
   </div>
 </div>
 <script>
+  // what is a promise? >>  i promise to let you know when i am done
+  function pause(milliseconds = 1000) {
+    return new Promise(function (resolve) {
+      setTimeout(resolve,milliseconds)
+    })
+  }
 
   function game() {
     return {
@@ -56,7 +62,7 @@
       },
 
       // METHODS
-      flipCard(card) {
+      async flipCard(card) {
         console.log(card)
         card.flipped = !card.flipped
         // check the flipped cards size
@@ -64,12 +70,25 @@
           // alert('time to check for match')
           // if the flipped cards matched
           if (this.hasMatch()) {
-            alert('you have a matched cards')
-            // Change the cleared status of these cards
+            // setTimeout(() => {
+            //   alert('you have a matched cards')
+            //   // Change the cleared status of these cards
+            //   this.flippedCards.forEach(card => card.cleared = true)
+            // },1000)
+            // wait for this promise to resolve then do what ever after
+            await pause();
             this.flippedCards.forEach(card => card.cleared = true)
+            alert('you have a matched cards')
           }
+          // if no match
           // flip back the cards over from the beginning
+          await pause();
           this.flippedCards.forEach((card) => card.flipped = false)
+
+          // setTimeout(() => {
+          //   // wait a second then flip back to default
+          //   this.flippedCards.forEach((card) => card.flipped = false)
+          // },1000)
         }
       },
       hasMatch() {
