@@ -26,6 +26,18 @@
     </template>
   </div>
 </div>
+<div
+  x-data="{show: false, message:'Default Message'}"
+  x-show.transition.opacity="show"
+  @flash.window="
+            message = $event.detail.message;
+            show = true;
+            setTimeout(() => show = false, 1000)
+        "
+  class="fixed bottom-0 right-0 bg-green-500 text-white p-2 mb-4 mr-4 rounded">
+  <span x-text="message" class="pr-4"></span>
+<!--  <button @click="show = false"></button>-->
+</div>
 <script>
   // what is a promise? >>  i promise to let you know when i am done
   function pause(milliseconds = 1000) {
@@ -33,6 +45,13 @@
       setTimeout(resolve,milliseconds)
     })
   }
+
+  function flash(message) {
+    window.dispatchEvent(new CustomEvent('flash',{
+      detail: {message}
+    }));
+  }
+
 
   function game() {
     return {
@@ -46,7 +65,7 @@
         {color: 'red',flipped: false,cleared: false},
         {color: 'blue',flipped: false,cleared: false},
         {color: 'yellow',flipped: false,cleared: false},
-      ],
+      ].sort(() => Math.random() - .5),
 
       // COMPUTED
       get flippedCards() {
@@ -63,13 +82,19 @@
 
       // METHODS
       async flipCard(card) {
-        console.log(card)
+        // avoid multiple selections
+        // if we have two selected cards then don't do anything
+        if (this.flippedCards.length === 2) {
+          return;
+        }
+        // console.log(card)
         card.flipped = !card.flipped
         // check the flipped cards size
         if (this.flippedCards.length === 2) {
           // alert('time to check for match')
           // if the flipped cards matched
           if (this.hasMatch()) {
+            flash('You found a match!');
             // setTimeout(() => {
             //   alert('you have a matched cards')
             //   // Change the cleared status of these cards
@@ -78,7 +103,7 @@
             // wait for this promise to resolve then do what ever after
             await pause();
             this.flippedCards.forEach(card => card.cleared = true)
-            alert('you have a matched cards')
+            // alert('you have a matched cards')
           }
           // if no match
           // flip back the cards over from the beginning
