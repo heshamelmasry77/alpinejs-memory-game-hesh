@@ -64,12 +64,18 @@
           // alert('time to check for match')
           // if the flipped cards matched
           if (this.hasMatch()) {
-            alert('you have a matched cards')
-            // Change the cleared status of these cards
-            this.flippedCards.forEach(card => card.cleared = true)
+            setTimeout(() => {
+              alert('you have a matched cards')
+              // Change the cleared status of these cards
+              this.flippedCards.forEach(card => card.cleared = true)
+            },1000)
           }
+          // if no match
           // flip back the cards over from the beginning
-          this.flippedCards.forEach((card) => card.flipped = false)
+          setTimeout(() => {
+            // wait a second then flip back to default
+            this.flippedCards.forEach((card) => card.flipped = false)
+          },1000)
         }
       },
       hasMatch() {
